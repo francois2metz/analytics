@@ -25,13 +25,13 @@ defmodule Plausible.Google.ReportRequest do
     [
       %__MODULE__{
         dataset: "imported_visitors",
-        dimensions: ["ga:date"],
+        dimensions: ["ga:nthWeek"],
         metrics: ["ga:users", "ga:pageviews", "ga:bounces", "ga:sessions", "ga:sessionDuration"]
       },
       %__MODULE__{
         dataset: "imported_sources",
         dimensions: [
-          "ga:date",
+          "ga:nthWeek",
           "ga:source",
           "ga:medium",
           "ga:campaign",
@@ -42,37 +42,37 @@ defmodule Plausible.Google.ReportRequest do
       },
       %__MODULE__{
         dataset: "imported_pages",
-        dimensions: ["ga:date", "ga:hostname", "ga:pagePath"],
+        dimensions: ["ga:nthWeek", "ga:hostname", "ga:pagePath"],
         metrics: ["ga:users", "ga:pageviews", "ga:exits", "ga:timeOnPage"]
       },
       %__MODULE__{
         dataset: "imported_entry_pages",
-        dimensions: ["ga:date", "ga:landingPagePath"],
+        dimensions: ["ga:nthWeek", "ga:landingPagePath"],
         metrics: ["ga:users", "ga:entrances", "ga:sessionDuration", "ga:bounces"]
       },
       %__MODULE__{
         dataset: "imported_exit_pages",
-        dimensions: ["ga:date", "ga:exitPagePath"],
+        dimensions: ["ga:nthWeek", "ga:exitPagePath"],
         metrics: ["ga:users", "ga:exits"]
       },
       %__MODULE__{
         dataset: "imported_locations",
-        dimensions: ["ga:date", "ga:countryIsoCode", "ga:regionIsoCode"],
+        dimensions: ["ga:nthWeek", "ga:countryIsoCode", "ga:regionIsoCode"],
         metrics: ["ga:users", "ga:sessions", "ga:bounces", "ga:sessionDuration"]
       },
       %__MODULE__{
         dataset: "imported_devices",
-        dimensions: ["ga:date", "ga:deviceCategory"],
+        dimensions: ["ga:nthWeek", "ga:deviceCategory"],
         metrics: ["ga:users", "ga:sessions", "ga:bounces", "ga:sessionDuration"]
       },
       %__MODULE__{
         dataset: "imported_browsers",
-        dimensions: ["ga:date", "ga:browser"],
+        dimensions: ["ga:nthWeek", "ga:browser"],
         metrics: ["ga:users", "ga:sessions", "ga:bounces", "ga:sessionDuration"]
       },
       %__MODULE__{
         dataset: "imported_operating_systems",
-        dimensions: ["ga:date", "ga:operatingSystem"],
+        dimensions: ["ga:nthWeek", "ga:operatingSystem"],
         metrics: ["ga:users", "ga:sessions", "ga:bounces", "ga:sessionDuration"]
       }
     ]

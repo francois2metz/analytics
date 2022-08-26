@@ -1,5 +1,6 @@
 defmodule Plausible.Google.HTTP do
   alias Plausible.HTTPClient
+  require Logger
 
   @spec get_report(module(), Plausible.Google.ReportRequest.t()) ::
           {:ok, {[map()], String.t() | nil}} | {:error, any()}
@@ -19,7 +20,6 @@ defmodule Plausible.Google.HTTP do
             metrics: Enum.map(report_request.metrics, &%{expression: &1}),
             hideTotals: true,
             hideValueRanges: true,
-            orderBys: [%{fieldName: "ga:date", sortOrder: "DESCENDING"}],
             pageSize: report_request.page_size,
             pageToken: report_request.page_token
           }
@@ -38,25 +38,32 @@ defmodule Plausible.Google.HTTP do
     with {:ok, %{status: 200, body: body}} <- response,
          {:ok, %{"reports" => [report | _]}} <- Jason.decode(body),
          token <- Map.get(report, "nextPageToken"),
-         report <- convert_to_maps(report) do
+         report <- convert_to_maps(report, report_request.date_range) do
       {:ok, {report, token}}
+    else
+      error ->
+        Logger.error("GA Import: Failed to fetch report. Reason: #{inspect(error)}")
+        error
     end
   end
 
-  defp convert_to_maps(%{
-         "data" => %{} = data,
-         "columnHeader" => %{
-           "dimensions" => dimension_headers,
-           "metricHeader" => %{"metricHeaderEntries" => metric_headers}
-         }
-       }) do
+  defp convert_to_maps(
+         %{
+           "data" => %{} = data,
+           "columnHeader" => %{
+             "dimensions" => dimension_headers,
+             "metricHeader" => %{"metricHeaderEntries" => metric_headers}
+           }
+         },
+         date_range
+       ) do
     metric_headers = Enum.map(metric_headers, & &1["name"])
     rows = Map.get(data, "rows", [])
 
     Enum.map(rows, fn %{"dimensions" => dimensions, "metrics" => [%{"values" => metrics}]} ->
       metrics = Enum.zip(metric_headers, metrics)
       dimensions = Enum.zip(dimension_headers, dimensions)
-      %{metrics: Map.new(metrics), dimensions: Map.new(dimensions)}
+      %{date_range: date_range, metrics: Map.new(metrics), dimensions: Map.new(dimensions)}
     end)
   end
 

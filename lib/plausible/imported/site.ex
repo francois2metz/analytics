@@ -151,10 +151,10 @@ defmodule Plausible.Imported do
     }
   end
 
-  defp get_date(%{dimensions: %{"ga:date" => date}}) do
-    date
-    |> Timex.parse!("%Y%m%d", :strftime)
-    |> NaiveDateTime.to_date()
+  defp get_date(%{date_range: %Date.Range{first: start_date}, dimensions: %{"ga:nthWeek" => week}}) do
+    {week_number, ""} = Integer.parse(week)
+    days_to_add = week_number * 7
+    Date.add(start_date, days_to_add)
   end
 
   @missing_values ["(none)", "(not set)", "(not provided)"]

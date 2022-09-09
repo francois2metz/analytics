@@ -37,4 +37,15 @@ defmodule PlausibleWeb.BillingView do
         "custom"
     end
   end
+
+  def upgrade_link(user) do
+    if user.enterprise_plan do
+      link("Contact us →",
+        to: "mailto:enterprise@plausible.io",
+        class: "text-sm font-medium text-yellow-800"
+      )
+    else
+      link("Upgrade now →", to: "/settings", class: "text-sm font-medium text-yellow-800")
+    end
+  end
 end

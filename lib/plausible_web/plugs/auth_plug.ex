@@ -14,10 +14,11 @@ defmodule PlausibleWeb.AuthPlug do
       id ->
         user =
           Repo.get_by(Plausible.Auth.User, id: id)
-          |> Repo.preload(
+          |> Repo.preload([
+            :enterprise_plan,
             subscription:
               from(s in Plausible.Billing.Subscription, order_by: [desc: s.inserted_at])
-          )
+          ])
 
         if user do
           Sentry.Context.set_user_context(%{id: user.id, name: user.name, email: user.email})

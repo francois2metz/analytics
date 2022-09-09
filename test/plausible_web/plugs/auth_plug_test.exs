@@ -41,4 +41,21 @@ defmodule PlausibleWeb.AuthPlugTest do
     assert conn.assigns[:current_user].id == user.id
     assert conn.assigns[:current_user].subscription.id == subscription.id
   end
+
+  test "looks up enterprise plan" do
+    user = insert(:user)
+    enterprise_plan = insert(:enterprise_plan, user: user)
+
+    subscription =
+      insert(:subscription, user: user, paddle_plan_id: enterprise_plan.paddle_plan_id)
+
+    conn =
+      conn(:get, "/")
+      |> init_test_session(%{current_user_id: user.id})
+      |> AuthPlug.call(%{})
+
+    assert conn.assigns[:current_user].id == user.id
+    assert conn.assigns[:current_user].subscription.id == subscription.id
+    assert conn.assigns[:current_user].enterprise_plan.id == enterprise_plan.id
+  end
 end

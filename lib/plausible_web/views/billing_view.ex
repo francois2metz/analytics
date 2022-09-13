@@ -38,14 +38,8 @@ defmodule PlausibleWeb.BillingView do
     end
   end
 
-  def upgrade_link(user) do
-    if user.enterprise_plan do
-      link("Contact us →",
-        to: "mailto:enterprise@plausible.io",
-        class: "text-sm font-medium text-yellow-800"
-      )
-    else
-      link("Upgrade now →", to: "/settings", class: "text-sm font-medium text-yellow-800")
-    end
-  end
+  def enterprise?(%Plausible.Auth.User{enterprise_plan: %Plausible.Billing.EnterprisePlan{}}),
+    do: true
+
+  def enterprise?(_user), do: false
 end

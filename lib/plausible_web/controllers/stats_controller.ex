@@ -170,7 +170,7 @@ defmodule PlausibleWeb.StatsController do
     shared link exists, render it directly.
 
     2. Shared link with password protection: Same checks as without the password, but an extra step is taken to
-    protect the page with a password. When the user passes the password challenge, a cookie is set with Plausible.Auth.Token.sign_shared_link().
+    protect the page with a password. When the user passes the password challenge, a cookie is set with `Plausible.Auth.Token.sign_shared_link/0`.
     The cookie allows the user to access the dashboard for 24 hours without entering the password again.
   """
   def shared_link(conn, %{"domain" => domain, "auth" => auth}) do

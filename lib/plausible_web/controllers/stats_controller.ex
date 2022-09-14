@@ -4,7 +4,7 @@ defmodule PlausibleWeb.StatsController do
 
   The stats dashboards are currently the only part of the app that uses client-side
   rendering. Since the dashboards are heavily interactive, they are built with React
-  which is an appropraite choice for highly interactive browser UIs.
+  which is an appropriate choice for highly interactive browser UIs.
 
                                      +---------------+                +-----------------+ +---------------------+
                                      | BrowserClient |                | StatsController | | ApiStatsController  |
